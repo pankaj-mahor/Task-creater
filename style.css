@@ -1,0 +1,23 @@
+body{
+    font-family: 'Lato', sans-serif;
+}
+.margin{
+    margin-top: 100px;
+}
+@media only screen and (min-width: 993px) {
+    .container {
+      width: 35%;
+    }
+}
+i{
+    color: red;
+}
+.small{
+    font-size: 8px;
+    margin-left:25px;
+    color: #2BBBAD;
+    text-align: center;
+}
+footer{
+    text-align: center;
+}
