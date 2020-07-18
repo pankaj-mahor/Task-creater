@@ -4,11 +4,6 @@ const taskList = document.querySelector('.collection');
 const clearBtn = document.querySelector('.clear-tasks');
 const filter = document.querySelector('#filter');
 const taskInput = document.querySelector('#task');
-
-var today = new Date();
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-var dateTime = date+' '+time;
 //load event
 loadEventListner();
 
@@ -40,11 +35,6 @@ function getTasks(){
         //Add Class
         li.className = 'collection-item';
         //create text node and append to li
-        li.appendChild(document.createTextNode(task));
-        const span = document.createElement('span');
-        span.className = 'small';
-        span.innerHTML = time;
-        li.appendChild(span);
         // Create New Link
         const link = document.createElement('a');
         link.className = 'delete-item secondary-content';
@@ -71,13 +61,7 @@ function addTask(e){
     li.className = 'collection-item';
     //create text node and append to li
     li.appendChild(document.createTextNode(taskInput.value));
-
-    //create date now 
-    const span = document.createElement('span');
-    span.className = 'small';
-    span.innerHTML = time;
-    li.appendChild(span);
-        //over date
+        
     // Create New Link
     const link = document.createElement('a');
     link.className = 'delete-item secondary-content';
@@ -127,6 +111,7 @@ function removeTask(e){
 //remove from local storagr
 
 function removeTaskFromLocalStorage(taskitem){
+    let tasks;
     if(localStorage.getItem('tasks') === null){
         tasks =[];
     }
