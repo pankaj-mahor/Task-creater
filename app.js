@@ -4,6 +4,11 @@ const taskList = document.querySelector('.collection');
 const clearBtn = document.querySelector('.clear-tasks');
 const filter = document.querySelector('#filter');
 const taskInput = document.querySelector('#task');
+
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+var dateTime = date+' '+time;
 //load event
 loadEventListner();
 
@@ -35,7 +40,7 @@ function getTasks(){
         //Add Class
         li.className = 'collection-item';
         //create text node and append to li
-         li.appendChild(document.createTextNode(task));
+        li.appendChild(document.createTextNode(task));
         // Create New Link
         const link = document.createElement('a');
         link.className = 'delete-item secondary-content';
@@ -55,31 +60,31 @@ function addTask(e){
     if (taskInput.value === '') {
         alert('Add a Task First'); 
     }else{
+            
+        //Create a li list item 
+        const li = document.createElement('li');
+        //Add Class
+        li.className = 'collection-item';
+        //create text node and append to li
+        li.appendChild(document.createTextNode(taskInput.value));
 
-     //Create a li list item 
-      const li = document.createElement('li');
-    //Add Class
-      li.className = 'collection-item';
-    //create text node and append to li
-      li.appendChild(document.createTextNode(taskInput.value));
+        // Create New Link
+        const link = document.createElement('a');
+        link.className = 'delete-item secondary-content';
+        //Add icon HTML
+        link.innerHTML = '<i class="fa fa-times"></i>';
+
+        ///Append link to li
+        li.appendChild(link);
+
+        //Append li to ul
+        taskList.appendChild(li);
         
-    // Create New Link
-      const link = document.createElement('a');
-      link.className = 'delete-item secondary-content';
-    //Add icon HTML
-      link.innerHTML = '<i class="fa fa-times"></i>';
+        // Save data to the Local Storage
+        storeTaskInLocalStorage(taskInput.value);
 
-    ///Append link to li
-      li.appendChild(link);
-
-    //Append li to ul
-      taskList.appendChild(li);
-    
-    // Save data to the Local Storage
-      storeTaskInLocalStorage(taskInput.value);
-
-    //Clear Input after add a task
-      taskInput.value='';
+        //Clear Input after add a task
+        taskInput.value='';
     }   
     //Prevent default Form behaviour
     e.preventDefault();
@@ -103,15 +108,20 @@ function storeTaskInLocalStorage(task){
 function removeTask(e){
 
     if (e.target.parentElement.classList.contains('delete-item')) {
-        e.target.parentElement.parentElement.remove();
+        if (confirm('Are you sure ?')) {
+            console.log(e.target.parentElement.parentElement)
+            e.target.parentElement.parentElement.remove();
+            //  REmove from local Storage
+            removeTaskFromLocalStorage(e.target.parentElement.parentElement);
+        }
         
-        //  REmove from local Storage
-        removeTaskFromLocalStorage(e.target.parentElement.parentElement);
     }
 }
+
 //remove from local storagr
 
-function removeTaskFromLocalStorage(taskitem){
+function removeTaskFromLocalStorage(taskItem){
+    console.log(taskItem);
     let tasks;
     if(localStorage.getItem('tasks') === null){
         tasks =[];
@@ -120,12 +130,13 @@ function removeTaskFromLocalStorage(taskitem){
         tasks = JSON.parse(localStorage.getItem('tasks'));
     }
     tasks.forEach(function(task, index){
-        if(taskitem.textContent === task){
+        if(taskItem.textContent === task){
             tasks.splice(index , 1);
+            // localStorage.removeItem(tasks);
         }
     });
-
-    localStorage.setItem('tasks' , JSON.stringify(tasks));
+    // localStorage.removeItem(tasks);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 //Clear all tasks
 function clearAllTasks(){
